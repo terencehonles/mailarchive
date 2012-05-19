@@ -11,6 +11,8 @@ setup(
     version = '1.0',
     packages = find_packages(),
 
+    install_requires = ['jsontemplate', 'python-dateutil'],
+
     author = 'Terence Honles',
     author_email = 'terence@honles.com',
     description = 'Alternative web interface for GNU Mailman mail archives',
@@ -18,4 +20,9 @@ setup(
     license = 'PSF',
     keywords = 'Mailman WebArchive Pipermail Archives Mail Email',
 
+    entry_points = {
+        'console_scripts': [
+            'mbox2json = mailarchive.utils:run_convert',
+        ],
+    },
 )
