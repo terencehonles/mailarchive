@@ -11,7 +11,7 @@ setup(
     version = '1.0',
     packages = find_packages(),
 
-    install_requires = ['jsontemplate', 'python-dateutil'],
+    install_requires = ['PyYAML', 'jsontemplate', 'python-dateutil'],
 
     author = 'Terence Honles',
     author_email = 'terence@honles.com',
@@ -23,6 +23,18 @@ setup(
     entry_points = {
         'console_scripts': [
             'mbox2json = mailarchive.utils:run_convert',
+            'mailarchive = mailarchive.utils:run_mailarchive',
         ],
     },
+
+    package_data = {
+        'mailarchive': [
+            # Templates
+            'mailarchive/data/templates/*.jst',
+            'mailarchive/data/templates/partials/*.jst',
+
+            # Styles
+            'mailarchive/data/styles/*.css',
+        ],
+    }
 )

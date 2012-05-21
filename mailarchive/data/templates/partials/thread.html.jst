@@ -1,0 +1,18 @@
+{{.section message}}{{.section headers}}
+<ul>
+    {{.section message_id_hash}}
+    <li id="{{@}}"><a href="{{@}}.html">
+    {{.or}}
+    <li><span>
+    {{.end}}
+    {{subject|html}}
+    {{.section message_id_hash}}</a>{{.or}}</span>{{.end}}
+{{.end}}{{# headers}}
+    {{.section from}}
+    by
+    <a href="author.html#{{headers.from|url-param-value}}">{{@|html}}</a>
+    {{.end}}
+{{.end}}{{# message}}
+    {{.repeated section children}}{{@}}{{.end}}
+    </li>
+</ul>

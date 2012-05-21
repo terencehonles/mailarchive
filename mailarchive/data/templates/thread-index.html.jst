@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{title}}</title>
+</head>
+<body>
+    <h1>{{title}}</h1>
+    <ol id="indexes">
+        <li><a href="date.html">Date</a></li>
+        <li><a href="thread.html">Thread</a></li>
+        <li><a href="subject.html">Subject</a></li>
+        <li><a href="author.html">Author</a></li>
+    </ol>
+    {{.repeated section threads}}
+    {{.section message}}{{.section headers}}
+    <h2 id="{{subject|url-param-value}}">{{subject|html}}</h2>
+    <ul>
+        {{.section message_id_hash}}
+        <li id="{{@}}"><a href="{{@}}.html">
+        {{.or}}
+        <li><span>
+        {{.end}}
+        {{subject|html}}
+        {{.section message_id_hash}}</a>{{.or}}</span>{{.end}}
+    {{.end}}{{# headers}}
+        {{.section from}}
+        by
+        <a href="author.html#{{headers.from|url-param-value}}">{{@|html}}</a>
+        {{.end}}
+    {{.end}}{{# messages}}
+        {{.repeated section children}}{{@}}{{.end}}
+        </li>
+    </ul>
+    {{.end}}
+</body>
+</html>

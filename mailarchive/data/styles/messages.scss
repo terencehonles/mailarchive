@@ -1,0 +1,201 @@
+@import "compass/css3/border-radius";
+@import "compass/css3/shared";
+
+
+@mixin indented-body {
+    margin-left: 50px;
+    padding: 0 1em;
+}
+
+@mixin inline-block {
+    display: inline-block;
+    z-index: 1;
+    *display: inline;
+}
+
+@mixin round-left($radius) {
+    @include border-bottom-left-radius($radius);
+    @include border-top-left-radius($radius);
+}
+
+@mixin round-right($radius) {
+    @include border-bottom-right-radius($radius);
+    @include border-top-right-radius($radius);
+}
+
+$date-color: #777777;
+$name-color: #aa0000;
+$controls-bg-color: #f5f5f5;
+$controls-border-color: #aaaaaa;
+$controls-font-color: #666666;
+$reply-bg-color: #2b63ff;
+$reply-border-color: #094aff;
+$reply-font-color: #ffffff;
+
+body {
+    font-family: "Arial", "Helvetica", sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+h1 {
+    font-size: 18pt;
+    text-align: center;
+}
+
+#controls {
+    $radius: 0.5ex;
+    font-size: 9pt;
+    margin: 1em;
+    @include experimental(user-select, none);
+
+    ol, ul, li {
+        @include inline-block;
+        list-style: none;
+        margin: 0;
+        padding: 0;
+    }
+
+    ol {
+        margin-right: 2ex;
+
+        li {
+            background-color: $controls-bg-color;
+            border: 1px solid $controls-border-color;
+            border-left-width: 0;
+        }
+
+        li:first-child {
+            border-width: 1px;
+            @include round-left($radius);
+        }
+        li:last-child { @include round-right($radius); }
+
+        li:hover {
+            background-color: darken($controls-bg-color, 10%);
+        }
+        li.disabled:hover {
+            background-color: $controls-bg-color;
+        }
+    }
+
+    #reply {
+        background-color: $reply-bg-color;
+        border-color: $reply-border-color;
+        a { color: $reply-font-color; }
+    }
+    #reply:hover {
+        background-color: darken($reply-bg-color, 5%);
+    }
+
+    #indexes:before {
+        content: "Sorted by:";
+        color: $controls-font-color;
+        font-weight: bold;
+        @include inline-block;
+        padding: 1ex 1ex 1ex 2ex;
+    }
+
+
+    // clip requires position: absolute
+    // img { position: absolute; }
+    a, span {
+        color: $controls-font-color;
+        font-weight: bold;
+        @include inline-block;
+        padding: 1ex 2ex;
+        text-decoration: none;
+        /*
+        position: relative;
+        width: 25px;
+        height: 25px;
+        */
+    }
+    a:hover {
+        color: darken($controls-font-color, 20%);
+    }
+    li.disabled span {
+        color: lighten($controls-font-color, 20%);
+        cursor: default;
+    }
+}
+
+/*
+#previous img { clip: rect(0, 25px, 25px, 0); }
+
+#next img {
+    clip: rect(0, 50px, 25px, 25px);
+    left: -25px;
+}
+
+#index-date img {
+    clip: rect(25px, 25px, 50px, 0);
+    top: -25px;
+}
+
+#index-thread img {
+    clip: rect(25px, 50px, 50px, 25px);
+    left: -25px;
+    top: -25px;
+}
+
+#index-author img {
+    clip: rect(50px, 25px, 75px, 0);
+    top: -50px;
+}
+
+#index-subject img {
+    clip: rect(50px, 50px, 75px, 25px);
+    left: -25px;
+    top: -50px;
+}
+*/
+
+#message {
+    margin: 1em 2ex;
+    position: relative;
+}
+
+#headers {
+    margin: 0;
+    list-style: none;
+    // last on purpose
+    @include indented-body;
+}
+
+#from-pic {
+    float: left;
+    height: 50px;
+    width: 50px;
+}
+
+#from { color: $name-color; }
+#subject { font-weight: bold; }
+
+#date {
+    color: $date-color;
+    font-size: 11pt;
+    font-weight: lighter;
+}
+
+// narrow screen size
+@media all and (min-width: 500px) {
+    #date, #message-body {
+        @include indented-body;
+        margin-left: 50px;
+        padding: 0 1em;
+    }
+}
+
+// date will be getting close to the headers
+@media all and (min-width: 700px) {
+    #date {
+        position: absolute;
+        top: 0;
+        right: 0;
+    }
+}
+
+#controls .delete, .delete {
+    display: none;
+}

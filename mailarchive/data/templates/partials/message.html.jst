@@ -1,0 +1,9 @@
+<div id="message">
+    <img id="from-pic" src="{{@|icon.url.jst}}" title="{{headers.from|html}}" alt="{{headers.from|html}}" />
+    <ul id="headers">
+        <li id="from">{{headers.from|html}}</li>
+        <li id="subject">{{headers.subject|html}}</li>
+    </ul>
+    <div id="date">{{headers.date|html}}</div>
+    <pre id="message-body">{{payload|html}}</pre>
+</div>

@@ -1,0 +1,44 @@
+<div id="controls">
+    <ul><li><span class="delete">Paging:</span><ol id="paging"
+        >{{.section previous_thread}}<li id="previous-thread"><a
+            href="{{@|paging.url.jst|html}}"
+            title="“{{subject|html-attr-value}}” by {{from|html-attr-value}}"
+            >Previous Thread</a></li
+        >{{.or}}<li id="previous-thread" class="disabled"><span
+            >Previous Thread</span></li
+        >{{.end}}{{.section message}}{{.section previous}}<li id="previous"><a
+            href="{{@|paging.url.jst|html}}"
+            title="“{{subject|html-attr-value}}” by {{from|html-attr-value}}"
+            >Previous</a></li
+        >{{.or}}<li id="previous" class="disabled"><span
+            >Previous</span></li
+        >{{.end}}{{.end}}{{.section message}}{{.section next}}<li id="next"><a
+            href="{{@|paging.url.jst|html}}"
+            title="“{{subject|html-attr-value}}” by {{from|html-attr-value}}"
+            >Next</a></li
+        >{{.or}}<li id="next" class="disabled"><span
+            >Next</span></li
+        >{{.end}}{{.end}}{{.section next_thread}}<li id="next-thread"><a
+            href="{{@|paging.url.jst|html}}"
+            title="“{{subject|html-attr-value}}” by {{from|html-attr-value}}"
+            >Next Thread</a></li
+        >{{.or}}<li id="next-thread" class="disabled"><span
+            >Next Thread</span></li
+        >{{.end}}</ol></li
+    ><li>
+{{.section message}}{{.section headers}}
+        <span class="delete">Actions:</span><ol id="actions"
+        ><li id="reply"><a href="mailto:{{list_address|url-param-value}}?Subject={{subject|url-param-value}}&amp;In-Reply-To={{message_id|url-param-value}}">Reply</a></li></ol></li
+
+    ><li><span class="delete">Sorted by:</span><ol id="indexes"
+        ><li id="index-date"><a
+            href="{{date_index|html}}#{{message_id_hash}}">Date</a></li
+        ><li id="index-thread"><a
+            href="{{thread_index|html}}#{{message_id_hash}}">Thread</a></li
+        ><li id="index-subject"><a
+            href="{{subject_index|html}}#{{message_id_hash}}">Subject</a></li
+        ><li id="index-author"><a
+            href="{{author_index|html}}#{{message_id_hash}}">Author</a></li
+    ></ol></li></ul>
+</div>
+{{.end}}{{.end}}

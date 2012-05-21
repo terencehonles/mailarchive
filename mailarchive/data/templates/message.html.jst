@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>{{title}}</title>
+        <link rel="stylesheet" type="text/css"
+              href="{{web_root|html-attr-value}}messages.css" />
+    </head>
+    <body>
+        <h1><a href="{{top_level|html}}">{{title}}</a></h1>
+        {{@|controls.html.jst}}
+        {{message|message.html.jst}}
+    </body>
+</html>
