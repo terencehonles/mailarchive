@@ -33,6 +33,10 @@ setup(
             'mailarchive/data/templates/*.jst',
             'mailarchive/data/templates/partials/*.jst',
 
+            # Scripts
+            'mailarchive/data/scripts/*.js',
+            'mailarchive/data/scripts/*.js.jst',
+
             # Styles
             'mailarchive/data/styles/*.css',
         ],

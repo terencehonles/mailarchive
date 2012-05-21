@@ -5,6 +5,7 @@ from __future__ import unicode_literals
 import codecs
 import json
 import pkg_resources
+import re
 import sys
 import shutil
 import yaml
@@ -16,7 +17,7 @@ from gzip import GzipFile
 from io import BytesIO, open
 from itertools import groupby
 from jsontemplate import _jsontemplate as jsontemplate # bad __all__
-from os import path
+from os import listdir, makedirs, path
 
 from mailarchive.parse import parse_mbox
 from mailarchive.shared import NS, paging_info, simple_from, wrap_dictionaries
@@ -75,6 +76,13 @@ class Path(unicode):
             return path.isdir(self)
         else:
             return pkg_resources.resource_isdir(__name__, self)
+
+    def listdir(self):
+        if not self.pkg_resource:
+            return listdir(self)
+        else:
+            return pkg_resources.resource_listdir(__name__, self)
+
 
     def open(self, encoding=None, errors='strict'):
         'returns a file stream to the specified resource'
@@ -436,6 +444,9 @@ def run_mailarchive():
     if not args.web_root.endswith('/'):
         args.web_root += '/'
 
+    if not path.isdir(args.output):
+        makedirs(args.output)
+
     try:
         preprocessor = args.preprocess
     except AttributeError:
@@ -448,6 +459,9 @@ def run_mailarchive():
 
 def run_messages(threads, args):
     'builds the message files'
+
+    with open(path.join(args.output, 'messages.json'), 'wb') as out:
+        out.write(json.dumps(threads, ensure_ascii=False).encode('utf-8'))
 
     partials = {}
     if args.partials.isdir():
@@ -492,11 +506,44 @@ def run_messages(threads, args):
 def run_static(args):
     'writes static files to the specified output directory'
 
+    PATTERN = re.compile('(["\'])')
+    formatters = {'string-data': lambda x: PATTERN.sub(r'\\\1', x)}
+
     R = lambda x: Path(x, pkg_resource=True)
 
-    for filename in ['messages.css']:
-        with open(path.join(args.output, filename), 'wb') as out:
-            out.write(R('data/styles/%s' % filename).read())
+    # partial templates (client side rendering)
+    partials = R('data/templates/partials/')
+    with open(path.join(args.output, 'templates.json'), 'wb') as out:
+        out.write(json.dumps(dict(
+            (name, (partials + name).read(encoding='utf-8'))
+            for name in partials.listdir()
+            if name.endswith('.jst')
+        )).encode('utf-8'))
+
+    # message.js.jst expansion
+    with open(path.join(args.output, 'messages.js'), 'wb') as out:
+        template = R('data/scripts/messages.js.jst').read(encoding='utf-8')
+
+        data = jsontemplate.expand(template, args.__dict__, meta='[[]]',
+                                   more_formatters=formatters).encode('utf-8')
+
+        out.write(data)
+
+    # history.js + adapter
+    with open(path.join(args.output, 'history.js'), 'wb') as out:
+        out.write(R('data/scripts/history.js').read())
+        out.write(';\n')
+        out.write(R('data/scripts/history.adapter.jquery.js').read())
+
+    # everything else is a straight copy to output directory
+    for type, files in (('scripts',
+                            ['jquery-1.7.2.min.js', 'json-template.js']),
+                        ('styles',
+                            ['messages.css'])):
+
+        for filename in files:
+            with open(path.join(args.output, filename), 'wb') as out:
+                out.write(R('data/%s/%s' % (type, filename)).read())
 
 
 convert_parser = ArgumentParser(
