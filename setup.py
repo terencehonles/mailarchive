@@ -19,6 +19,7 @@ setup(
     long_description = documentation,
     license = 'PSF',
     keywords = 'Mailman WebArchive Pipermail Archives Mail Email',
+    url = 'https://github.com/terencehonles/mailarchive',
 
     entry_points = {
         'console_scripts': [

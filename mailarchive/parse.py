@@ -67,6 +67,9 @@ def parse_mbox(filename=None, fileobj=None):
 
             mbox = mailbox.mbox(tempfile.name)
             for message in mbox:
+                # skip corrupted messages
+                if not message.get('Message-Id'): continue
+
                 yield simplify_message(message)
 
 
@@ -85,7 +88,8 @@ def simplify_message(message):
         # do not make it any easier to spam?
         # headers['from'] = sender
 
-    headers['from_hash'] = md5(sender.encode('utf-8')).hexdigest()
+    if sender:
+        headers['from_hash'] = md5(sender.encode('utf-8')).hexdigest()
 
     date = headers.get('date')
     if date:
